@@ -52,3 +52,31 @@ $phrase .= $prenomDuProfesseur; // ".="
 
 echo '<br />'; // Saut de ligne HTML
 echo $phrase;
+
+// Les variables numériques
+$nombreEntier = 3;
+$nombreDecimal = 3.14;
+
+// Calculs
+// addition : +
+// soustraction : -
+// produit : *
+// division : /
+
+// Opérateurs condensés
+// +=
+// -=
+// *=
+// /=
+
+// Opérateurs d'incrémentation
+// ++
+// --
+
+// Les constantes
+define('TAUX_TVA', 10);
+
+$prixHT = 50;
+$prixTTC = 50 * (10 * 50 / 100);
+
+$prixTTC = $prixHT * (TAUX_TVA * $prixHT / 100);
