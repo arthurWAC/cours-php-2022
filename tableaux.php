@@ -46,7 +46,8 @@ echo $tableauDe2Dimensions[2][0]; // 7
 $professeur = [
 	'prenom' => 'Arthur',
 	'nom' => 'Weill',
-	'age' => 35
+	'age' => 35,
+	'permis_de_conduire' => true
 ];
 
 $phrase = '';
