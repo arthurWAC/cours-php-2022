@@ -45,4 +45,8 @@ if ($age < AGE_REQUIS_BOITE_DE_NUIT || $jAiDesBaskets) {
 // false || false => false
 // Addition : 1 + 1 + 1 + 1 => 4 (!= 0) true    0 + 0 + 0 + 1 + 0 + 0 + 0 => 1 (!= 0) true
 
+// Le caractère ! permet d'inverser une condition
+
+$condition = true; // !$condition vaut false
+
 // Structure switch ?

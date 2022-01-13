@@ -76,6 +76,8 @@ foreach ($objets as $objet) {
 	if ($objet === OBJET_RECHERCHE) {
 		$jAiUneMontre = true;
 		break; // Je "casse" = termine la boucle, les itérations restantes ne sont pas effectuées
+
+		// Si plusieurs boucles, possibilité de "casser" plusieurs boucles en même temps avec break 2; break 3; break x;
 	}
 }
 
