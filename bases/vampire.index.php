@@ -20,11 +20,26 @@ define('RACE_ZOMBIE', 'zombie');
 // array => tableau
 // bool => booléen
 
-function forceCourante($force, $soifDeSang)
+function forceCourante(int $force, int $soifDeSang): int
 {
+    $forceSupplementaire = 0;
+
 	// Si la soif de sang est supérieure à 3, alors on gagne 1 pt de force
+    if ($soifDeSang > 3) {
+        $forceSupplementaire++;
+    }
+
 	// Si la soif de sang est supérieure à 6, alors on gagne 2 pts de force
+    if ($soifDeSang > 6) {
+        $forceSupplementaire++;
+    }
+
 	// Si la soif de sang est de 10, alors on gagne 3 pts de force
+    if ($soifDeSang === 10) {
+        $forceSupplementaire++;
+    }
+
+    return $force + $forceSupplementaire;
 }
 
 function agiliteCourante($agilite, $soifDeSang)
@@ -96,13 +111,13 @@ function transcriptionDuJournal(array $journal): string
  $prenom = 'Carmela';
  $age = 99;
 
- $force = rand(12, 20);
+ $force = rand(5, 20);
  $agilite = rand(7, 15);
  $mechancete = rand(7, 20);
  $magie = rand(5, 15);
  
  $stockDeSang = 0;
- $soifDeSang = 0; // Va de 0 à 10. 0 => Pas en manque. 10 => En manque total
+ $soifDeSang = rand(0, 6); // Va de 0 à 10. 0 => Pas en manque. 10 => En manque total
  $pointsDeVie = 100;
 
  $inventaire = [];
@@ -219,6 +234,29 @@ $actions[] = 'Je prends un taxi, 10£ ('. $coutTaxi .'€) pour aller au VCoL';
 
 // Gestion du prix du verre de sang
 // Définir l'action associée
+$verreDeSangEnPounds = 20;
+$reductionEnPounds = 5;
+
+if (forceCourante($force, $soifDeSang) >= 10) {
+    $verreDeSangEnPounds -= $reductionEnPounds;
+}
+
+if (forceCourante($force, $soifDeSang) >= 15) {
+    $verreDeSangEnPounds -= $reductionEnPounds;
+}
+
+$verreDeSangEnEuros = conversionPoundsEuros($verreDeSangEnPounds);
+$euros -= $verreDeSangEnEuros;
+
+$actions = [];
+
+$actions[] = 'Je prends un verre de sang, '. $verreDeSangEnPounds .'£ (' . $verreDeSangEnEuros . '€)' .
+             '<br />Pour info, Force = '. $force .' SdS = '. $soifDeSang .
+             '<br />Force courante = ' . forceCourante($force, $soifDeSang);
+
+
+$soifDeSang--;
+$actions[] = 'Ma soif de sang diminue de 1, et est donc de ' . $soifDeSang;
 
 $evenement = [
     'date' => '11/02/2018',
