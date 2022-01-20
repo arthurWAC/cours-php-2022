@@ -42,24 +42,56 @@ function forceCourante(int $force, int $soifDeSang): int
     return $force + $forceSupplementaire;
 }
 
-function agiliteCourante($agilite, $soifDeSang)
+function agiliteCourante(int $agilite, int $soifDeSang): int
 {
+    $agiliteMalus = 0;
 	// Si la soif de sang est supérieure à 4, alors on perd 1 pt d'agilité
+    // (Alternative au if pour une incrémentation de 1)
+    $agiliteMalus += (int) ($soifDeSang > 4);
+        // ($soifDeSang > 4) => true ou false
+        // (int) true ou false => 1 ou 0
+        // += 0 => rien a + 0 = a    +=1 => ++
+
 	// Si la soif de sang est supérieure à 7, alors on perd 2 pts d'agilité
+    $agiliteMalus += (int) ($soifDeSang > 7);
+
+    return $agilite - $agiliteMalus;
 }
 
-function mechanceteCourante($mechancete, $soifDeSang, $pointsDeVie)
+function mechanceteCourante(int $mechancete, int $soifDeSang, int $pointsDeVie): int
 {
-	// Si la soif de sang est supérieure à 5, alors on gagne 1 pt de méchanceté
-	// Si la soif de sang est supérieure à 8, alors on gagne 2 pts de méchanceté
+    $mechanceteSupplementaire = 0;
 
-	// De plus, si les pointsDeVie sont inférieurs à 50, on gagne 1 pt de méchanceté
+    // Pas de break, parce que je peux faire toutes les opérations :
+    // si soifDeSang = 10 et pointsDeVie = 40, je passe dans les 3 opérations
+    switch (true) {
+        // Si la soif de sang est supérieure à 5, alors on gagne 1 pt de méchanceté
+        case ($soifDeSang > 5):
+            $mechanceteSupplementaire++;
+
+	    // Si la soif de sang est supérieure à 8, alors on gagne 2 pts de méchanceté
+        case ($soifDeSang > 8):
+            $mechanceteSupplementaire++;
+
+	    // De plus, si les pointsDeVie sont inférieurs à 50, on gagne 1 pt de méchanceté
+        case ($pointsDeVie < 50):
+            $mechanceteSupplementaire++;
+    }
+    
+   return $mechancete + $mechanceteSupplementaire;
 }
 
-function conversionDollarsEuros($sommeEnDollars)
+function conversionDollarsEuros(float $sommeEnDollars): float
 {
 	// 1 Euro = 1.24074 U.S. dollars
+    $taux = 1.24074;
+    $montantEnEuros = $sommeEnDollars / $taux;
+
 	// La banque prend une commission de 1€ sur chaque transaction
+    $commissionBanque = 1;
+    $montantEnEuros += $commissionBanque;
+
+    return round($montantEnEuros, 2);
 }
 
 function conversionPoundsEuros(float $sommeEnPounds): float
@@ -77,12 +109,12 @@ function conversionPoundsEuros(float $sommeEnPounds): float
     return round($montantEnEuros, 2);
 }
 
-function transcriptionDuJournal(array $journal): string
+function transcriptionDuJournal(array $evenements): string
 {
 	// Parcourir le journal pour créer une chaine de caractères complètes
     $html = '';
 
-    foreach ($journal as $evenement) {
+    foreach ($evenements as $evenement) {
 
         $html .= '<h2>' . $evenement['date'] . ' - ' . $evenement['ville'] . '</h2>';
 
@@ -277,7 +309,32 @@ $journal[] = $evenement;
   * Elle prend un nouvel avion pour Los Angeles, pour 660£.
   * Durant le vol, sa soif de sang augmente de 2
   */
+$actions = [];
 
+$euros -= conversionPoundsEuros(10);
+$actions[] = 'Retour en taxi pour 10£';
+
+$euros -= conversionPoundsEuros(660);
+$actions[] = 'Achat du billet pour Los Angeles';
+
+// Point d'attention ci-dessous
+// Ne pas faire : $euros -= conversionPoundsEuros(660 + 10);
+// Car : echo conversionPoundsEuros(660 + 10) . ' != '. (conversionPoundsEuros(660) + conversionPoundsEuros(10));
+
+$soifDeSang += 2;
+$actions[] = 'Le vol long, ma soif de sang augmente de 2';
+
+$evenement = [
+    'date' => '11/02/2018',
+    'ville' => 'Londres',
+    'actions' => $actions,
+    'artefact' => [
+        'trouve' => false,
+        'nom' => ''
+    ]
+];
+
+$journal[] = $evenement;
 
  /**
   * Fin de la journée, remplir le journal
@@ -290,12 +347,27 @@ $journal[] = $evenement;
  /**
   * Elle loue une voiture de sport pour se rendre dans le désert du Nevada, coût : 250$
   */
+  $euros -= conversionDollarsEuros(250);
+  $evenement = [
+    'date' => '12/02/2018',
+    'ville' => 'Nevada',
+    'actions' => ['Location de la voiture de sport'],
+    'artefact' => [
+        'trouve' => false,
+        'nom' => ''
+    ]
+];
 
+$journal[] = $evenement;
  /**
   * Arrivé dans le désert, elle doit se rendre dans une grotte millénaire.
   * Si son agilité est inférieure à 10, alors elle va mettre + de temps et sa soif 
   * de sang augmente de 1
   */
+  if (agiliteCourante($agilite, $soifDeSang) < 10) {
+      $soifDeSang++;
+      $actions[] = 'Je mets + de temps à atteindre la grotte.';
+  }
 
  /**
   * Dans la grotte, elle est attaquée par un sorcier
