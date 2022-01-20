@@ -12,6 +12,14 @@ define('RACE_ZOMBIE', 'zombie');
 /**
  * FONCTIONS
  */
+
+// 5 types principaux disponibles
+// int => nombre entier
+// float => nombre décimal
+// string => chaine de caractères
+// array => tableau
+// bool => booléen
+
 function forceCourante($force, $soifDeSang)
 {
 	// Si la soif de sang est supérieure à 3, alors on gagne 1 pt de force
@@ -39,15 +47,44 @@ function conversionDollarsEuros($sommeEnDollars)
 	// La banque prend une commission de 1€ sur chaque transaction
 }
 
-function conversionPoundsEuros($sommeEnPounds)
+function conversionPoundsEuros(float $sommeEnPounds): float
 {
 	// 1 Euro = 0.884473909 British pounds
+    $taux = 0.884473909;
+    // 1€   0.88
+    // X ?  10
+    $montantEnEuros = $sommeEnPounds / $taux;
+
 	// La banque prend une commission de 1€ sur chaque transaction
+    $commissionBanque = 1;
+    $montantEnEuros += $commissionBanque;
+
+    return round($montantEnEuros, 2);
 }
 
-function transcriptionDuJournal($journal)
+function transcriptionDuJournal(array $journal): string
 {
 	// Parcourir le journal pour créer une chaine de caractères complètes
+    $html = '';
+
+    foreach ($journal as $evenement) {
+
+        $html .= '<h2>' . $evenement['date'] . ' - ' . $evenement['ville'] . '</h2>';
+
+        $html .= '<ul>';
+        foreach ($evenement['actions'] as $action) {
+            $html .= '<li>' . $action . '</li>';
+        }
+        $html .= '</ul>';
+
+        if ($evenement['artefact']['trouve']) {
+            $html .= '<h4>Artefact trouvé : ' . $evenement['artefact']['nom'] . '</h4>';
+        }
+
+        $html .= SEPARATEUR;
+    }
+
+    return $html;
 }
 
 /**
@@ -82,7 +119,7 @@ function transcriptionDuJournal($journal)
   * Elle doit consigner ses faits et gestes dans un journal, avec à chaque fois : 
   *		- date et heure
   * 	- ville
-  * 	- actions significatives
+  * 	- action(s) significative(s)
   * 	- artefact trouvé, si oui lequel
   */
 
@@ -94,6 +131,23 @@ function transcriptionDuJournal($journal)
   * Votre héroïne Vampire quitte son domaine, avant de partir, son frère lui confie 2 doses
   * de sang et 5.000€. Elle monte dans sa voiture et rejoint l'aéroport.
   */
+$stockDeSang += 2;
+$euros += 5000;
+
+$evenement = [
+    'date' => '11/02/2018',
+    'ville' => 'Paris',
+    'actions' => [
+        'Mon frère me confie 2 doses de sang',
+        'Mon frère me donne 5.000€'
+    ],
+    'artefact' => [
+        'trouve' => false,
+        'nom' => ''
+    ]
+];
+
+$journal[] = $evenement;
 
  /**
   * Sur le parking de l'aéroport, elle paye 100€ pour pouvoir y laisser sa voiture 1 mois.
@@ -102,11 +156,51 @@ function transcriptionDuJournal($journal)
   * 	- si sa magie est inférieure à 10, alors elle reçoit l'objet : "dague de sorcier"
   *		- si sa magie est égale ou supérieure à 10, alors elle reçoit l'objet : "poil de loup-garou"
   */
+  $euros -= 100;
+  $actions = ['J\'arrive à l\'aéroport'];
+
+  if ($magie < 10) {
+    $inventaire[] = 'dague de sorcier';
+    $actions[] = 'On me donne une dague de sorcier';
+  } else {
+    $inventaire[] = 'poil de loup-garou';
+    $actions[] = 'On me donne un poil de loup-garou';
+  }
+
+    $evenement = [
+        'date' => '11/02/2018',
+        'ville' => 'Paris',
+        'actions' => $actions,
+        'artefact' => [
+            'trouve' => false,
+            'nom' => ''
+        ]
+    ];
+
+    $journal[] = $evenement;
 
  /**
   * Un billet d'avion acheté 150€ et elle s'envole pour Londres
   * Durant le vol, sa soif de sang augmente de 1
   */
+  $euros -= 150;
+  $actions = [];
+  $actions[] = 'J\'achète un billet d\'avion';
+
+  $soifDeSang++;
+  
+  $evenement = [
+    'date' => '11/02/2018',
+    'ville' => 'Paris',
+    'actions' => $actions,
+    'artefact' => [
+        'trouve' => false,
+        'nom' => ''
+    ]
+];
+
+$journal[] = $evenement;
+  
 
  /**
   * Elle prend un taxi (10£) pour se rendre au VCoL (Vampire Club of London)
@@ -116,6 +210,29 @@ function transcriptionDuJournal($journal)
   *		- Si la force du Vampire est de 15 ou +, il a 5£ de réduction supplémentaire
   * Le verre de sang lui fait descendre sa soif de sang de 1 unité
   */
+$coutTaxi = conversionPoundsEuros(10);
+$euros -= $coutTaxi;
+
+$actions = [];
+$actions[] = 'Je prends un taxi, 10£ ('. $coutTaxi .'€) pour aller au VCoL';
+
+
+// Gestion du prix du verre de sang
+// Définir l'action associée
+
+$evenement = [
+    'date' => '11/02/2018',
+    'ville' => 'Londres',
+    'actions' => $actions,
+    'artefact' => [
+        'trouve' => false,
+        'nom' => ''
+    ]
+];
+
+
+$journal[] = $evenement;
+
 
  /**
   * Retour à l'aéroport en taxi, pour 10£.
