@@ -18,14 +18,32 @@ include('./Banque.php');
 
 echo '<h1>Histoire Vampire en objets</h1>';
 
-$journal = new Journal;
+$vampire = new Vampire('Carmela', 'Ferinis', 99);
 
-$evenement = new Evenement('11/02/2018', 'Paris');
-$evenement->ajouteAction('Je prends un taxi');
-$evenement->ajouteAction('');
-$evenement->ajouteAction('Je prends une voiture');
+$vampire->estLe('11/02/2018');
+$vampire->estA('Paris');
 
-$journal->ajoutEvenement($evenement);
+// echo '<pre>';
+// print_r($vampire);
+// echo '</pre>';
+
+$vampire->augmenteStockDeSang(2);
+$vampire->raconte('Mon frère me confie 2 doses de sang');
+
+$vampire->encaisse(5000);
+$vampire->raconte('Mon frère me donne 5.000€');
+
+$vampire->nouvellePage();
 
 
-echo $journal->transcription();
+$vampire->raconte('Je prends le taxi');
+$vampire->depense(10);
+$vampire->raconte('Je dépense 10€');
+
+$vampire->nouvellePage();
+
+// echo '<pre>';
+// print_r($vampire);
+// echo '</pre>';
+
+echo $vampire->journal->transcription();
