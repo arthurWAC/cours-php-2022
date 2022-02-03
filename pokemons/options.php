@@ -117,11 +117,15 @@ include 'includes.php';
             <div class="row">
                 <div class="col-12 col-md-6">
                     <h3>Dresseur 1</h3>
-                    <p>Nom : <?= $_GET['nameDresseur1'] ?></p>
-                    <p><b>Détails du Pokemon :</b></p>
                     <?php
-
+                    $dresseur1 = new Dresseur($_GET['nameDresseur1']);
                     $pokemon1 = new Pokemon($_GET['pokemonDresseur1']);
+
+                    echo $dresseur1->informations();
+
+                    $dresseur1->setPokemon($pokemon1);
+
+                    echo $dresseur1->informations();
                     ?>
                 </div>
                 <div class="col-12 col-md-6">
@@ -129,13 +133,42 @@ include 'includes.php';
                     <p>Nom : <?= $_GET['nameDresseur2'] ?></p>
                     <p><b>Détails du Pokemon :</b></p>
                     <?php
+                    $dresseur2 = new Dresseur($_GET['nameDresseur2']);
+                    $dresseur2->setPokemon(new Pokemon($_GET['pokemonDresseur2']));
 
-                    $pokemon2 = new Pokemon($_GET['pokemonDresseur2']);
-
-
+                    echo $dresseur2->informations();
                     ?>
                 </div>
             </div>
+
+
+            <form action="result.php" method="post">
+                <!-- Champs cachés -->
+                <input type="hidden" name="nameDresseur1" value="<?= $dresseur1->getNom() ?>" />
+                <input type="hidden" name="nameDresseur2" value="<?= $dresseur2->getNom() ?>" />
+                <input type="hidden" name="pokemonDresseur1" value="<?= $dresseur1->getPokemonId() ?>" />
+                <input type="hidden" name="pokemonDresseur2" value="<?= $dresseur2->getPokemonId() ?>" />
+                <input type="hidden" name="nbTours" value="<?= $_GET['nbTours'] ?>" />
+
+                <!-- JETON/TOKEN/SIGNATURE CSRF -->
+                <?php
+                $signature = $dresseur1->getNom() .
+                             $dresseur2->getNom() .
+                             $dresseur1->getPokemonId() .
+                             $dresseur2->getPokemonId() .
+                             $_GET['nbTours'];
+
+                // Clé pour sécuriser
+                $signature .= 'zliSFRz45FFaizrgfaz24523562zefzre';
+
+                $signature .= date('dmY');
+
+                $signature = hash('sha256', $signature);
+                ?>
+                <input type="hidden" name="signature" value="<?= $signature ?>" />
+
+                <input type="submit" value="Démarrer le combat" class="btn btn-success">
+            </form>
         </div>
     </body>
 </html>

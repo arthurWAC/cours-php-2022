@@ -11,8 +11,8 @@ class Database
     private const JSON_FIELD_TYPE = 'type';
 
     // Les noms des champs que j'utilise dans mon code
-    private const USE_FIELD_NOM = 'nom';
-    private const USE_FIELD_TYPE = 'type';
+    public const USE_FIELD_NOM = 'nom';
+    public const USE_FIELD_TYPE = 'type';
 
     /**
      * Cette fonction retournera la liste de tous les pokemons
@@ -91,7 +91,7 @@ class Database
                 
                 return [
                     'id' => $pokemon[self::JSON_FIELD_ID],
-                    'name' => $pokemon[self::JSON_FIELD_NAME][self::JSON_FIELD_NAME_ENGLISH],
+                    self::USE_FIELD_NOM => $pokemon[self::JSON_FIELD_NAME][self::JSON_FIELD_NAME_ENGLISH],
                     'types' => $pokemon['type'],
                     'hp' => $pokemon['base']['HP'],
                     'attack' => $pokemon['base']['Attack'],
