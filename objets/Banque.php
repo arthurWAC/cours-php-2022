@@ -11,14 +11,15 @@ class Banque
         self::DEVISE_DOLLARS => 1.24074
     ];
 
+    // La banque prend une commission de 1€ sur chaque transaction
     public const COMMISSION = 1;
 
     public const OPERATION_DEBIT = 'debit';
     public const OPERATION_CREDIT = 'credit';
 
-    private int $euros;
+    private float $euros;
 
-    public function __construct(int $euros)
+    public function __construct(float $euros)
     {
         $this->euros = $euros;
     }
@@ -29,9 +30,12 @@ class Banque
         $montantEuros = $montant;
 
         if ($devise != self::DEVISE_EUROS) {
-            // Conversion ...
+            // Conversion selon le taux
+            $tauxUtilise = self::TAUX[$devise];
+            $montantEuros = $montant / $tauxUtilise;
 
-            // Commission ...
+            // Commission bancaire
+            $montantEuros += self::COMMISSION;
         }
 
         if ($type === self::OPERATION_DEBIT) {
@@ -41,5 +45,11 @@ class Banque
         if ($type === self::OPERATION_CREDIT) {
             $this->euros += $montantEuros;
         }
+    }
+
+    // getteur pour ma propriété privée
+    public function getEuros(): float
+    {
+        return $this->euros;
     }
 }
