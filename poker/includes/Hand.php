@@ -95,5 +95,25 @@ class Hand
         return (isset($occurences[2]) && $occurences[2] == 2);
     }
 
+    public function contentSet(): bool
+    {
+        // [Card, Card, Card, Card, Card] => [7, 7, 7, 11, 13] => [7 => 3, 11 => 1, 13 => 1]
+
+        $occurences = [];
+
+        foreach ($this->cards as $card) {
+            $occurences[] = $card->getValue();
+        }
+
+        $occurences = array_count_values($occurences);
+
+        return in_array(3, $occurences);
+    }
+
+    public function contentFull(): bool
+    {
+        return $this->contentPair() && $this->contentSet();
+    }
+
 
 }
