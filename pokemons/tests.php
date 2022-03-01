@@ -49,3 +49,37 @@ if (Database::read(1000) === [])  {
 } else {
     echo '<h3 style="color: red">Test FAIL</h3>'; 
 }
+
+echo '<hr />';
+
+$tab = [];
+var_dump(implode('', $tab));
+
+var_dump(hash('sha256', ''));
+
+echo '<hr />';
+
+
+
+// ----------------
+
+$pokemon = new Pokemon(18);  // Il a 83 HP
+
+$pokemon->removeHP(13);
+if ($pokemon->getHP() == 70) {
+    echo '<h3 style="color: green">Test OK</h3>'; 
+} else {
+    echo '<h3 style="color: red">Test FAIL</h3>'; 
+}
+
+$pokemon->removeHP(90);
+// On ne passe pas sous zéro
+if ($pokemon->getHP() == 0) {
+    echo '<h3 style="color: green">Test OK</h3>'; 
+} else {
+    echo '<h3 style="color: red">Test FAIL</h3>'; 
+}
+
+
+
+

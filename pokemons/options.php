@@ -152,18 +152,16 @@ include 'includes.php';
 
                 <!-- JETON/TOKEN/SIGNATURE CSRF -->
                 <?php
-                $signature = $dresseur1->getNom() .
-                             $dresseur2->getNom() .
-                             $dresseur1->getPokemonId() .
-                             $dresseur2->getPokemonId() .
-                             $_GET['nbTours'];
+                $dataForCSRF = [
+                    $dresseur1->getNom(),
+                    $dresseur2->getNom(),
+                    $dresseur1->getPokemonId(),
+                    $dresseur2->getPokemonId(),
+                    $_GET['nbTours']
+                ];
 
                 // Clé pour sécuriser
-                $signature .= 'zliSFRz45FFaizrgfaz24523562zefzre';
-
-                $signature .= date('dmY');
-
-                $signature = hash('sha256', $signature);
+                $signature = Security::generateSignatureCSRF($dataForCSRF);
                 ?>
                 <input type="hidden" name="signature" value="<?= $signature ?>" />
 

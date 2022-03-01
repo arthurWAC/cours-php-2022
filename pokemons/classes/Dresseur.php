@@ -17,6 +17,11 @@ class Dresseur
         $this->pokemon = $pokemon;
     }
 
+    public function getPokemon(): ?Pokemon
+    {
+        return $this->pokemon;
+    }
+
     public function informations(): string
     {
         $html = '';
@@ -45,5 +50,14 @@ class Dresseur
     public function getPokemonId(): int
     {
         return $this->pokemon->getId();
+    }
+
+    // Je veux faire une fonction "hasPokemon" => "a Pokemon"
+    // 2 réponses possibles : "oui" ou "non"
+    // Cette fonction est utilisée dans un if, donc ça va me renvoyer un booléen
+    public function hasPokemon(): bool
+    {
+        // Si pokemon n'est pas null, c'est que j'ai bien un pokemon
+        return ($this->pokemon !== null);
     }
 }
