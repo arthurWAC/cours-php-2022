@@ -67,10 +67,17 @@ for ($c = 1; $c <= 5; $c++) {
     $gregorie->receiveCard($pack->distribute());
 }
 
-echo $arthur;
-echo "\n";
-echo $luis;
+// echo $arthur;
+// echo "\n";
+// echo $luis;
 
 // Analyse des mains
-$analyseMainArthur = new Hand($arthur->getCards());
-$informationsMainArthur = $analyseMainArthur->getInformations();
+// $analyseMainArthur = new Hand($arthur->getCards());
+// $informationsMainArthur = $analyseMainArthur->getInformations();
+
+// Arthur a une paire et voici ces cartes : 
+// Luis a une suite
+// Louise a 2 paires
+// Grégorie a un brelan
+
+// "n'a rien"
