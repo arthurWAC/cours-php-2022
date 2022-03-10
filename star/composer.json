@@ -1,0 +1,16 @@
+{
+    "require": {
+        "fakerphp/faker": "^1.19"
+    },
+    "config": {
+        "platform": {
+            "php": "8.1"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Controller\\": "controllers/",
+            "Model\\": "models/"
+        }
+    }
+}
