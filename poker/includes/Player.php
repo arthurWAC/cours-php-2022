@@ -31,6 +31,9 @@ class Player implements Stringable
         return $out;
     }
 
+    /**
+     * @return Card[]
+     */
     public function getCards(): array
     {
         return $this->cards;

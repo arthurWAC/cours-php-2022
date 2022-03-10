@@ -24,14 +24,33 @@ class Hand
         self::COMBINAISON_STRAIGHT_FLUSH => 'une Straight Flush',
     ];
 
+    public const POINTS = [
+        self::COMBINAISON_HIGH_CARD => 1,
+        self::COMBINAISON_1_PAIR => 2,
+        self::COMBINAISON_2_PAIRS => 3,
+        self::COMBINAISON_SET => 4,
+        self::COMBINAISON_STRAIGHT => 5,
+        self::COMBINAISON_FLUSH => 6,
+        self::COMBINAISON_FULL => 7,
+        self::COMBINAISON_QUADS => 8,
+        self::COMBINAISON_STRAIGHT_FLUSH => 9,
+    ];
+
     private array $cards;
 
+    private string $combinaison;
+    private int $points;
+
+    /**
+     * @params Card[] $cards
+     */
     public function __construct(array $cards)
     {
         $this->cards = $cards;
+        $this->searchInformations();
     }
 
-    public function getInformations(): array
+    public function searchInformations(): void
     {
         /**
          * Combinaison possibles :
@@ -75,49 +94,6 @@ class Hand
             // Dès que je trouve une combinaison je m'arrête
             // Assemblage, des if, des switch ou autre...
 
-            // V1 avec des if et un flag
-            // $combinaisonFinded = false;
-
-            // if (!$combinaisonFinded && $this->contentStraightFlush()) {
-            //     $combinaison = self::COMBINAISON_STRAIGHT_FLUSH;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentQuads()) {
-            //     $combinaison = self::COMBINAISON_QUADS;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentFull()) {
-            //     $combinaison = self::COMBINAISON_FULL;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentFlush()) {
-            //     $combinaison = self::COMBINAISON_FLUSH;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentStraight()) {
-            //     $combinaison = self::COMBINAISON_STRAIGHT;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentSet()) {
-            //     $combinaison = self::COMBINAISON_SET;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentTwoPair()) {
-            //     $combinaison = self::COMBINAISON_2_PAIRS;
-            //     $combinaisonFinded = true;
-            // }
-
-            // if (!$combinaisonFinded && $this->contentPair()) {
-            //     $combinaison = self::COMBINAISON_1_PAIR;
-            //     $combinaisonFinded = true;
-            // }
-
             // V2 switch
             switch (true) {
 
@@ -158,20 +134,14 @@ class Hand
                 break;
             }
 
-            return [
-                'combinaison' => $combinaison,
-                'combinaison_name' => $this->getCombinaisonName($combinaison)
-            ];
+            $this->combinaison = $combinaison;
+            $this->points = self::POINTS[$this->combinaison];
     }
 
-    public function getCombinaisonName(string $combinaison): string
+    public function getCombinaisonName(): string
     {
-        return self::NAMES[$combinaison] ?? '';
+        return self::NAMES[$this->combinaison] ?? '';
     }
-
-    /**
-     * Suggestions de méthodes, à conserver ou non
-     */
 
     public function contentPair(): bool
     {
@@ -298,5 +268,24 @@ class Hand
         return $this->contentStraight() && $this->contentFlush();
     }
 
+    public function __toString(): string
+    {
+         return '<p>Combinaison : ' . $this->getCombinaisonName() . '</p>';
+    }
 
+    /**
+     * Get the value of combinaison
+     */ 
+    public function getCombinaison()
+    {
+        return $this->combinaison;
+    }
+
+    /**
+     * Get the value of points
+     */ 
+    public function getPoints()
+    {
+        return $this->points;
+    }
 }

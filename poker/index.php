@@ -72,12 +72,101 @@ for ($c = 1; $c <= 5; $c++) {
 // echo $luis;
 
 // Analyse des mains
-// $analyseMainArthur = new Hand($arthur->getCards());
-// $informationsMainArthur = $analyseMainArthur->getInformations();
+$analyseMainArthur = new Hand($arthur->getCards());
+$analyseMainLuis = new Hand($luis->getCards());
+$analyseMainLouise = new Hand($louise->getCards());
+$analyseMainGregorie = new Hand($gregorie->getCards());
 
-// Arthur a une paire et voici ces cartes : 
-// Luis a une suite
-// Louise a 2 paires
-// Grégorie a un brelan
+$players = [
+    'arthur' => $analyseMainArthur->getPoints(),
+    'luis' => $analyseMainLuis->getPoints(),
+    'louise' => $analyseMainLouise->getPoints(),
+    'gregorie' => $analyseMainGregorie->getPoints()
+];
 
-// "n'a rien"
+arsort($players);
+
+echo '<p>Classement</p>';
+$position = 1;
+foreach ($players as $name => $points) {
+
+    echo '<p>Position ' . $position . '</p>';
+    echo ${$name};
+
+    $analyseMain = 'analyseMain' . ucfirst($name);
+    echo ${$analyseMain};
+
+    $position++;
+}
+
+
+// var_dump($analyseMainArthur);
+
+// var_dump($informationsMainArthur);
+
+// echo $arthur;
+// echo '<p>Combinaison : ' . $informationsMainArthur['combinaison_name'] . '</p>';
+// x4, une fois par joueur
+
+// ----------
+
+// $combinaisons = [];
+
+// for ($i = 1; $i <= 100; $i++) {
+
+//     $pack = new Pack;
+//     $pack->shuffle();
+//     $joueur = new Player('Joueur');
+
+//     for ($d = 1; $d <= 5; $d++) {
+//         $joueur->receiveCard($pack->distribute());
+//     }
+    
+//     $hand = new Hand($joueur->getCards());
+//     $informations = $hand->getInformations();
+
+//     $combinaisons[] = $informations['combinaison'];
+// }
+
+// $repartition = array_count_values($combinaisons);
+
+// arsort($repartition);
+
+// var_dump($repartition);
+
+// $nbFoisTotal = count($combinaisons);
+// <table>
+//     <thead>
+//         <tr>
+//             <th>Combinaison</th>
+//             <th>%</th>
+//         </tr>
+//     </thead>
+//     <tbody>
+//         <?php foreach ($repartition as $combinaison => $fois) :
+//         <tr>
+//             <td><?= $hand->getCombinaisonName($combinaison);</td>
+//             <td><?= round($fois / $nbFoisTotal * 100, 2)%</td>
+//         </tr>
+//         <?php endforeach;
+//     </tbody>
+// </table>
+
+
+    /**
+        high_card
+        flush    
+        high_card
+        high_card
+        1_pair   
+        2_pairs  
+        high_card
+        high_card
+        1_pair   
+        high_card
+
+        high_card => 6 => 60% (6 / 10 * 100)
+        1_pair => 2 => 20%
+        2_pairs => 1 => 10%
+        flush => 1 => 10%
+     */
